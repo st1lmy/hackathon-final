@@ -1,16 +1,19 @@
 import axios from "axios";
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:4000/api";
 
-export const anonymizeText = async (text) => {
-  const { data } = await axios.post(`${API_URL}/text`, { text });
-  return data.anonymized;
-};
+// Адрес вашего бэкенда из .env.local
+const API = import.meta.env.VITE_API_URL;
 
-export const anonymizeImage = async (file) => {
-  const form = new FormData();
-  form.append("file", file);
-  const res = await axios.post(`${API_URL}/image`, form, {
-    responseType: "blob",
-  });
-  return res.data;
-};
+// Функция для анонимизации текста
+export async function anonymizeText(text) {
+  const response = await axios.post(`${API}/text`, { text });
+  return response.data.anonymized;
+}
+
+// Функция для анонимизации изображений
+export async function anonymizeImage(file) {
+  const formData = new FormData();
+  formData.append("file", file);
+
+  const response = await axios.post(`${API}/image`, formData);
+  return response.data.text;
+}
